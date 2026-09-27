@@ -28,12 +28,6 @@ services:
     ports:
       - "${MINIO_BIND_HOST:-127.0.0.1}:${MINIO_API_PORT:-9000}:9000"
       - "127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-
   app:
     build: .
     restart: unless-stopped
@@ -41,7 +35,7 @@ services:
       postgres:
         condition: service_healthy
       minio:
-        condition: service_healthy
+        condition: service_started
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER:-familygram}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-familygram}
       APP_URL: ${APP_URL:-http://localhost:3000}

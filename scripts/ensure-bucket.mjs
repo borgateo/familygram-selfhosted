@@ -15,9 +15,21 @@ const client = new S3Client({
 })
 
 const Bucket = process.env.S3_BUCKET
-try {
-  await client.send(new HeadBucketCommand({ Bucket }))
-} catch {
-  await client.send(new CreateBucketCommand({ Bucket }))
-  console.log(`Created bucket ${Bucket}`)
+
+const delay = milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds))
+
+for (let attempt = 1; attempt <= 30; attempt += 1) {
+  try {
+    await client.send(new HeadBucketCommand({ Bucket }))
+    break
+  } catch {
+    try {
+      await client.send(new CreateBucketCommand({ Bucket }))
+      console.log(`Created bucket ${Bucket}`)
+      break
+    } catch (error) {
+      if (attempt === 30) throw error
+      await delay(2000)
+    }
+  }
 }
