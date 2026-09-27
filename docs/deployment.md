@@ -2,6 +2,8 @@
 
 The supplied `compose.yaml` is the reference deployment. It starts the application, PostgreSQL and MinIO with persistent named volumes.
 
+The MinIO service uses a digest-pinned, multi-architecture community build of the final patched open-source MinIO release. Its [public build source](https://github.com/coollabsio/minio) compiles the official MinIO source because upstream no longer publishes current community container images.
+
 ## Private-network deployment
 
 For a trusted private network such as Tailscale, bind the application and MinIO API to the private interface and set URLs that clients can reach:
