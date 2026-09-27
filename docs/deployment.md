@@ -17,6 +17,8 @@ S3_PUBLIC_ENDPOINT=http://your-private-host:9000
 
 Keep PostgreSQL and the MinIO console bound to localhost.
 
+If a separate dashboard should display FamilyGram's live status, set `HEALTH_ALLOWED_ORIGIN` to that dashboard's exact origin, for example `http://your-private-host:5000`. Only `/api/health` will return the corresponding CORS header; other origins cannot read the response in a browser.
+
 ## Internet-facing deployment
 
 Use an HTTPS reverse proxy such as Caddy, Traefik or nginx. Set `APP_URL` and `S3_PUBLIC_ENDPOINT` to their HTTPS origins so session cookies are marked secure and signed media URLs work in browsers.
